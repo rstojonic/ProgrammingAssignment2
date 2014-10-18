@@ -1,17 +1,23 @@
-## Put comments here that give an overall description of what your
-## functions do
+## R-prog Assignment 2
+##
+## A pair of functions that 
+## A: Wrap a matrix with some functionality (makeCacheMatrix)
+## B: Perform operations on a wrapped matrix (cacheSolve)
 
-## Write a short comment describing this function
+## A matrix wrapper that can get and set the contained matrix
+## Also provides functions for setting a 'solve' function
+## and getting the result of of that function 
+## (the function must be set first).
 
 makeCacheMatrix <- function(x = matrix()) {
-        m <- NULL
+        s <- NULL
         set <- function(y) {
                 x <<- y
-                m <<- NULL
+                s <<- NULL
         }
         get <- function() x
-        setSolve <- function(solve) m <<- solve
-        getSolve <- function() m
+        setSolve <- function(solve) s <<- solve
+        getSolve <- function() s
         list(set = set, get = get,
              setSolve = setSolve,
              getSolve = getSolve)
@@ -19,42 +25,21 @@ makeCacheMatrix <- function(x = matrix()) {
 
 
 
-## Write a short comment describing this function
+## Operates on a matrix wrapped by the makeCacheMatrix
+## Checks to see if the wrapped matrix has already had the 
+## solve function set, 
+## if so, returns the value returned
+## else, sets the solve function, then returns the value
 
 cacheSolve <- function(x, ...) {
-        m <- x$getSolve()
-        if(!is.null(m)) {
+        s <- x$getSolve()
+        if(!is.null(s)) {
                 message("getting cached data")
-                return(m)
+                return(s)
         }
         data <- x$get()
-        m <- solve(data, ...)
-        x$setSolve(m)
-        m
+        s <- solve(data, ...)
+        x$setSolve(s)
+        s
 }
 
-makeVector <- function(x = numeric()) {
-        m <- NULL
-        set <- function(y) {
-                x <<- y
-                m <<- NULL
-        }
-        get <- function() x
-        setmean <- function(mean) m <<- mean
-        getmean <- function() m
-        list(set = set, get = get,
-             setmean = setmean,
-             getmean = getmean)
-}
-
-cachemean <- function(x, ...) {
-        m <- x$getmean()
-        if(!is.null(m)) {
-                message("getting cached data")
-                return(m)
-        }
-        data <- x$get()
-        m <- mean(data, ...)
-        x$setmean(m)
-        m
-}
